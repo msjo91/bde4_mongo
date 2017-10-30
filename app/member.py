@@ -66,7 +66,70 @@ def signout():
     print("See you again, %s" % online.pop())
 
 
-def delete():
+def profile():
+    print("\n::::MY STATUS::::\n")
+    username = online[0]
+    if users.find_one({"username": username}):
+        cursor = users.find_one({"username": username})
+        print("""
+        Username: {username}
+        Name: {name}
+        Birthday: {birth}
+        Email: {email}
+        Phone: {phone}
+        Address: {address}
+        """.format(
+            username=username,
+            name=cursor['name'],
+            birth=str(cursor['birth']).split()[0],
+            email=cursor['email'],
+            phone=cursor['phone'],
+            address=cursor['address']
+        ))
+    else:
+        print("    Wrong password input!")
+        profile()
+
+
+def update_profile(act):
+    d = {"1": "first name", "2": "last name", "3": "birth", "4": "email", "5": "phone", "6": "address", "9": "password"}
+    print("\n::::UPDATE PROFILE::::\n")
+    username = online[0]
+    password = input("Enter password: ")
+    if users.find_one({"username": username, "password": password}):
+        if act == "3":
+            bday, bmonth, byear = map(int, input("Enter new birthday in DD-MM-YYYY format: ").split('-'))
+            try:
+                birth = datetime(byear, bmonth, bday)
+                users.update({"username": username}, {"$set": {"birth": birth}})
+                print("Update Success!")
+            except ValueError as e:
+                print('    ' + str(e))
+                update_profile(act)
+        else:
+            new = input("Enter new %s: " % d[act])
+            users.update({"username": username}, {"$set": {d[act]: new}})
+            if act == "1" or act == "2":
+                first_name = users.find_one({"username": username})["first name"]
+                last_name = users.find_one({"username": username})["last name"]
+                full_name = first_name + ' ' + last_name
+                users.update({"username": username}, {"$set": {"name": full_name}})
+                print("Update Success!")
+            elif act == "9":
+                new_confirm = input("Confirm password: ")
+                if new == new_confirm:
+                    print("Update Success!")
+                else:
+                    print("Passwords don't match!")
+                    update_profile(act)
+            else:
+                print("Update Success!")
+    else:
+        print("    Wrong password input!")
+        update_profile(act)
+
+
+def delete_account():
     print("\n::::DELETE ACCOUNT::::\n")
     username = online[0]
     password = input("Enter password: ")
@@ -75,3 +138,6 @@ def delete():
         if verification in ['y', 'Y', 'yes', 'Yes']:
             users.remove({'username': username})
             print("We had a good run, %s! We'll miss you :(" % online.pop())
+    else:
+        print("    Wrong password input!")
+        delete_account()
