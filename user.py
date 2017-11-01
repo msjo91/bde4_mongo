@@ -6,6 +6,7 @@ from main import *
 from post import *
 
 
+
 online = []
 
 def signin(db):
@@ -42,7 +43,7 @@ def signup(db):
                 full_name = first_name + ' ' + last_name
                 bday, bmonth, byear = map(int, input("Enter birthday in DD-MM-YYYY format: ").split('-'))
                 try:
-                    birth = datetime(byear, bmonth, bday)
+                    birth = datetime.datetime(byear, bmonth, bday)
                 except ValueError as e:
                     print('    ' + str(e))
                 email = input("Enter email: ")
@@ -69,10 +70,9 @@ def signout(db):
     print("See you again, %s" % online.pop())
 
 
-def profile(db):
+def profile(db,user):
     print("\n::::MY STATUS::::\n")
-    username = online[0]
-    cursor = db.users.find_one({"username": username})
+    cursor = db.users.find_one({"username": user})
     print("""
     Username: {username}
     Name: {name}
@@ -81,7 +81,7 @@ def profile(db):
     Phone: {phone}
     Address: {address}
     """.format(
-        username=username,
+        username=user,
         name=cursor['name'],
         birth=str(cursor['birth']).split()[0],
         email=cursor['email'],
@@ -90,29 +90,28 @@ def profile(db):
         ))
 
 
-def update_profile(db,act):
+def update_profile(db,user,act):
         d = {"1": "first name", "2": "last name", "3": "birth", "4": "email", "5": "phone", "6": "address", "9": "password"}
         print("\n::::UPDATE PROFILE::::\n")
-        username = online[0]
         password = input("Enter password: ")
-        if db.users.find_one({"username": username, "password": password}):
-            if act == "3":
+        if db.users.find_one({"username": user, "password": password}):
+            if act == 3:
                 bday, bmonth, byear = map(int, input("Enter new birthday in DD-MM-YYYY format: ").split('-'))
                 try:
-                    birth = datetime(byear, bmonth, bday)
-                    db.users.update({"username": username}, {"$set": {"birth": birth}})
+                    birth = datetime.datetime(byear, bmonth, bday)
+                    db.users.update({"username": user}, {"$set": {"birth": birth}})
                     print("Update Success!")
                 except ValueError as e:
                     print('    ' + str(e))
                     update_profile(act)
             else:
                 new = input("Enter new %s: " % d[act])
-                db.users.update({"username": username}, {"$set": {d[act]: new}})
+                db.users.update({"username": user}, {"$set": {d[act]: new}})
                 if act == "1" or act == "2":
-                    first_name = db.users.find_one({"username": username})["first name"]
-                    last_name = db.users.find_one({"username": username})["last name"]
+                    first_name = db.users.find_one({"username": user})["first name"]
+                    last_name = db.users.find_one({"username": user})["last name"]
                     full_name = first_name + ' ' + last_name
-                    db.users.update({"username": username}, {"$set": {"name": full_name}})
+                    db.users.update({"username": user}, {"$set": {"name": full_name}})
                     print("Update Success!")
                 elif act == "9":
                     new_confirm = input("Confirm password: ")
@@ -120,7 +119,7 @@ def update_profile(db,act):
                         print("Update Success!")
                     else:
                         print("Passwords don't match!")
-                        update_profile(act)
+                        update_profile(db,user,act)
                 else:
                     print("Update Success!")
         else:
@@ -129,16 +128,15 @@ def update_profile(db,act):
 
 
 
-def delete_account(db):
+def delete_account(db,user):
     k=123
     while True:
         print("\n::::DELETE ACCOUNT::::\n")
-        username = online[0]
         password = input("Enter password: ")
-        if db.users.find_one({"username": username, "password": password}):
+        if db.users.find_one({"username": user, "password": password}):
             verification = input("Are you sure? ")
             if verification in ['y', 'Y', 'yes', 'Yes']:
-                db.users.remove({'username': username})
+                db.users.remove({'username': user})
                 print("We had a good run, %s! We'll miss you :(" % online.pop())
                 break
         else:
@@ -146,7 +144,7 @@ def delete_account(db):
             k=input("0 is exit and 1 is re")
             break
     if k=="1":
-        delete_account(db)
+        delete_account(db,user)
     elif k=="0":
         pass
 

@@ -1,8 +1,7 @@
 from pymongo import MongoClient
-
 from user import *
-
 from post import *
+
 
 
 def index_sign(db):
@@ -39,7 +38,7 @@ def index_main(db):
         print("    0. Close")
         act = input("\nChoose an action: ")
         if act == "1":
-            index_profile(db)
+            index_profile(db,user)
             break
         if act == "2":
             postInterface(db,user)
@@ -48,6 +47,7 @@ def index_main(db):
             break
         elif act == "0":
             print("\nGood bye :D")
+            online.pop()
             client.close()
             break
         else:
@@ -61,7 +61,7 @@ def index_main(db):
         index_sign(db)
 
 
-def index_profile(db):
+def index_profile(db,user):
     delete=False
     while (1):
         print("\n===============================================================")
@@ -69,23 +69,23 @@ def index_profile(db):
         print("    2. Update Status")
         print("    9. Delete Account")
         print("    0. Main Page")
-        act = input("\nChoose an action: ")
-        if act == "1":
-            profile(db)
-        elif act == "2":
-            index_user_update(db)
-        elif act == "9":
+        act = int(input("\nChoose an action: "))
+        if act == 1:
+            profile(db,user)
+        elif act == 2:
+            index_user_update(db,user,act)
+        elif act == 9:
             delete=True
             break
-        elif act == "0":
+        elif act == 0:
             break
         else:
             print("Error: Wrong command!")
     if delete:
-        delete_account(db)
+        delete_account(db,user)
 
 
-def index_user_update(db):
+def index_user_update(db,user,act):
     while True:
         print("\n===============================================================")
         print("    1. First name")
@@ -98,7 +98,7 @@ def index_user_update(db):
         print("    0. Main Page")
         act = input("\nChoose an action: ")
         if act in ["1", "2", "3", "4", "5", "6", "9"]:
-            update_profile(db,act)
+            update_profile(db,user,act)
         elif act == "0":
             break
         else:

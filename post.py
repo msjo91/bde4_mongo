@@ -11,7 +11,10 @@ def postInterface(db,user):
     """
     while True:
         t = db.users.find_one({"username": user})
-        print("My Posts List : \n\n",t["posts"])
+        try:
+            print("My Posts List : \n\n",t["posts"])
+        except KeyError :
+            print("\nPosts not exists")
         print("\n===============================================================")
         print("    1. Insert Post")
         print("    2. Delete Post")
