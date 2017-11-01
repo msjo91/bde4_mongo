@@ -30,6 +30,7 @@ def index_sign(db):
 
 def index_main(db):
     logout=False
+    user=online[0]
     while True:
         print("\n===============================================================")
         print("    1. Profile")
@@ -41,7 +42,7 @@ def index_main(db):
             index_profile(db)
             break
         if act == "2":
-            postInterface(db)
+            postInterface(db,user)
         elif act == "9":
             logout=True
             break
