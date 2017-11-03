@@ -19,7 +19,7 @@ def index_sign(db):
         elif act == "0":
             print("\nGood bye :D")
             client.close()
-            exit()
+            exit() 
             break
         else:
             "Error: Wrong command!"
