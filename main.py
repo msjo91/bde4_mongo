@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from user import *
 from post import *
-
+from sys import *
 
 
 def index_sign(db):
@@ -19,6 +19,7 @@ def index_sign(db):
         elif act == "0":
             print("\nGood bye :D")
             client.close()
+            exit()
             break
         else:
             "Error: Wrong command!"
@@ -49,6 +50,7 @@ def index_main(db):
             print("\nGood bye :D")
             online.pop()
             client.close()
+            exit()
             break
         else:
             print("Error: Wrong command!")
