@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from user import *
 from post import *
 from sys import *
-
+from follow import *
 
 def index_sign(db):
     while True:
@@ -19,7 +19,7 @@ def index_sign(db):
         elif act == "0":
             print("\nGood bye :D")
             client.close()
-            exit() 
+            exit()
             break
         else:
             "Error: Wrong command!"
@@ -34,7 +34,9 @@ def index_main(db):
     while True:
         print("\n===============================================================")
         print("    1. Profile")
-        print("    2. Post Interface")
+        print("    2. Newsfeed")
+        print("    3. Post Interface")
+        print("    4. follow page")
         print("    9. Log out")
         print("    0. Close")
         act = input("\nChoose an action: ")
@@ -42,7 +44,14 @@ def index_main(db):
             index_profile(db,user)
             break
         if act == "2":
+            newsfeed(db,user)
+            break
+        if act == "3":
             postInterface(db,user)
+            break
+        if act == "4":
+            followpage(db,user)
+            break
         elif act == "9":
             logout=True
             break

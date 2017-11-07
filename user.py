@@ -58,7 +58,11 @@ def signup(db):
                     "birth": birth,
                     "email": email,
                     "phone": phone,
-                    "address": address
+                    "address": address,
+                    "following":0,
+                    "follower":0,
+                    "following list":[],
+                    "follower list":[]
                 })
                 print("User creation success!")
                 break
@@ -80,14 +84,21 @@ def profile(db,user):
     Email: {email}
     Phone: {phone}
     Address: {address}
+    following: {following}
+    follower: {follower}
+    following list: {following_list}
+    follower list: {follower_list}
     """.format(
         username=user,
         name=cursor['name'],
         birth=str(cursor['birth']).split()[0],
         email=cursor['email'],
         phone=cursor['phone'],
-        address=cursor['address']
-        ))
+        address=cursor['address'],
+        following=cursor['following'],
+        follower=cursor['follower'],
+        following_list=cursor['following list'],
+        follower_list=cursor['follower list']))
 
 
 def update_profile(db,user,act):
@@ -137,6 +148,10 @@ def delete_account(db,user):
             verification = input("Are you sure? ")
             if verification in ['y', 'Y', 'yes', 'Yes']:
                 db.users.remove({'username': user})
+                db.users.update({"follower list": {'$in': [user]}}, {'$inc': {'follower': -1}}, False, True)
+                db.users.update({"follower list":{'$in':[user]}},{'$pull':{'follower list':user}},False,True)
+                db.users.update({"following list": {'$in': [user]}}, {'$inc': {'following': -1}}, False, True)
+                db.users.update({"following list": {'$in': [user]}}, {'$pull': {'following list': user}}, False, True)
                 print("We had a good run, %s! We'll miss you :(" % online.pop())
                 break
         else:
