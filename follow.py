@@ -22,7 +22,7 @@ def newsfeed(db,user):
                 print("%s : "%newsfeed2[i][0], newsfeed2[i][1])
         except IndexError:
             print(" 더 볼 수있는 담벼락이 없습니다")
-        if input("\n 더 볼려면 1을 누르고 아니면 아무키나 누르세요 : ")=='1':
+        if input("\n 더 볼려면 1을 누르고 아니면 아무키나 누르세요 : " )=='1':
             k+=2
         else:
             break
