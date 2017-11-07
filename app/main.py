@@ -26,7 +26,7 @@ def index_sign():
 def index_main():
     print("\n===============================================================")
     print("    1. Profile")
-    print("    9. Log out")
+    print("    9. Sign out")
     print("    0. Close")
     act = input("\nChoose an action: ")
     if act == "1":
