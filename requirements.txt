@@ -5,7 +5,7 @@ ipython-genutils==0.2.0
 jedi==0.11.0
 olefile==0.44
 parso==0.1.1
-pexpect==4.2.1
+pexpect==4.3.0
 pickleshare==0.7.4
 Pillow==4.3.0
 prompt-toolkit==1.0.15
