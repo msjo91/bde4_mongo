@@ -4,7 +4,6 @@ from main import *
 import pymongo
 from datetime import datetime
 
-
 def newsfeed(db,user):
     k=2
     while True:
@@ -14,16 +13,67 @@ def newsfeed(db,user):
         for i in result:
             for j in i['posts']:
                 newsfeed.append([i['username'],j])
-        print(newsfeed)
-        newsfeed2=sorted(newsfeed, key=lambda x: datetime.strptime(x[1][1],'%Y/%m/%d %H:%M:%S'),reverse=True)
-        print(newsfeed2)
+        newsfeed2=sorted(newsfeed, key=lambda x: datetime.strptime(x[1]["date"],'%Y/%m/%d %H:%M:%S'),reverse=True)
         try:
             for i in range(0,k):
                 print("%s : "%newsfeed2[i][0], newsfeed2[i][1])
         except IndexError:
             print(" 더 볼 수있는 담벼락이 없습니다")
-        if input("\n 더 볼려면 1을 누르고 아니면 아무키나 누르세요 : " )=='1':
+
+        enter=input("\n담벼락을 더 볼려면 1을 좋아요는 2, 싫어요는 3, 좋아요 취소는 4,싫어요 취소는 5, 메뉴로 나갈려면 아무키나 누르시오: " )
+
+        if enter=="1":
             k+=2
+
+        elif enter == "2":
+            k = int(input("몇번째 뉴스피에 좋아요를 누르시겠습니까?"))
+            if db.users.find_one({"username":"%s"%newsfeed2[k-1][0], "posts":{"$elemMatch":{"date":newsfeed2[k-1][1]["date"],
+                                                                                        "like_list":{"$in":[user]}}}}):
+                print("\n이미 좋아요를 눌렀습니다")
+            else:
+                db.users.update({"username":"%s"%newsfeed2[k-1][0],"posts.date":newsfeed2[k-1][1]["date"]}
+                            ,{'$inc':{'posts.$.like':1}})
+                db.users.update({"username": "%s" % newsfeed2[k - 1][0], "posts.date": newsfeed2[k - 1][1]["date"]}
+                            , {'$addToSet': {'posts.$.like_list':user}})
+
+        elif enter == "3":
+            k = int(input("몇번째 뉴스피에 싫어요를 누르시겠습니까?"))
+            if db.users.find_one({"username": "%s" % newsfeed2[k - 1][0],
+                              "posts": {"$elemMatch": {"date": newsfeed2[k - 1][1]["date"],
+                                                       "hate_list": {"$in": [user]}}}}):
+                print("\n이미 싫어요를 눌렀습니다")
+            else:
+                db.users.update({"username":"%s"%newsfeed2[k-1][0],"posts.date":newsfeed2[k-1][1]["date"]}
+                                ,{'$inc':{'posts.$.hate':1}})
+                db.users.update({"username": "%s" % newsfeed2[k - 1][0], "posts.date": newsfeed2[k - 1][1]["date"]}
+                                , {'$addToSet': {'posts.$.hate_list': user}})
+
+
+        elif enter == "4":
+            k = int(input("몇번째 뉴스피에 좋아요를 취소하시겠습니까?"))
+            if db.users.find_one({"username": "%s" % newsfeed2[k - 1][0],
+                              "posts": {"$elemMatch": {"date": newsfeed2[k - 1][1]["date"],
+                                                       "like_list": {"$in": [user]}}}}):
+                db.users.update({"username":"%s"%newsfeed2[k-1][0],"posts.date":newsfeed2[k-1][1]["date"]}
+                                ,{'$inc':{'posts.$.like':-1}})
+                db.users.update({"username": "%s" % newsfeed2[k - 1][0], "posts.date": newsfeed2[k - 1][1]["date"]}
+                                , {'$pull': {'posts.$.like_list': user}})
+            else:
+                print('좋아요를 누르지 않았습니다')
+
+
+        elif enter == "5":
+            k = int(input("몇번째 뉴스피에 싫어요를 취소하시겠습니까?"))
+            if db.users.find_one({"username": "%s" % newsfeed2[k - 1][0],
+                              "posts": {"$elemMatch": {"date": newsfeed2[k - 1][1]["date"],
+                                                       "hate_list": {"$in": [user]}}}}):
+                db.users.update({"username":"%s"%newsfeed2[k-1][0],"posts.date":newsfeed2[k-1][1]["date"]}
+                                ,{'$inc':{'posts.$.hate':-1}})
+                db.users.update({"username": "%s" % newsfeed2[k - 1][0], "posts.date": newsfeed2[k - 1][1]["date"]}
+                                , {'$pull': {'posts.$.hate_list': user}})
+            else:
+                print('싫어요를 누르지 않았습니다')
+
         else:
             break
 
