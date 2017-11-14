@@ -71,7 +71,7 @@ def mypostslist(db,user):
 def insertPost(db,user):
     while True:
         t=db.users.find_one({"username": user})
-        now=datetime.datetime.now()
+        now=datetime.now()
         index = "%d/%d/%d %d:%d:%d" % (now.year, now.month, now.day, now.hour, now.minute, now.second)
         k=input("하고싶은 말 입력하세요 : ")
         db.users.update({"username": user}, {"$push":{"posts":{"post":k,"date":index}}})
