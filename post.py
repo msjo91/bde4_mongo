@@ -1,7 +1,8 @@
 from pymongo import MongoClient
 from main import *
 from user import *
-import datetime
+from datetime import *
+
 
 def postInterface(db,user):
 
@@ -11,8 +12,9 @@ def postInterface(db,user):
     """
     while True:
         t = db.users.find_one({"username": user})
+        posts_list = sorted(t['posts'], key=lambda x: datetime.strptime(x["date"], '%Y/%m/%d %H:%M:%S'), reverse=True)
         try:
-            print("My Posts List : \n\n",t["posts"])
+            print("My Posts List : \n\n",posts_list)
         except KeyError :
             print("\nPosts not exists")
         print("\n===============================================================")
@@ -35,9 +37,16 @@ def postInterface(db,user):
 def mypostslist(db,user):
     while True:
         t = db.users.find_one({"username": user})
-        for i in t['posts']:
-            print(i)
+        posts_list = sorted(t['posts'], key=lambda x: datetime.strptime(x["date"], '%Y/%m/%d %H:%M:%S'),
+                            reverse=True)
+        try:
+            for i in posts_list:
+                print(i)
+        except KeyError:
+            print("posts not exists")
+            break
         act = input("\n좋아요 명단을 볼려면 1,싫어요 명단을 보려면 2를 나갈려면 아무키나 누르세요 : ")
+
         if act=="1":
             for i in t['posts']:
                 print(i)
@@ -62,8 +71,6 @@ def mypostslist(db,user):
 def insertPost(db,user):
     while True:
         t=db.users.find_one({"username": user})
-        for i in t['posts']:
-            print(i)
         now=datetime.datetime.now()
         index = "%d/%d/%d %d:%d:%d" % (now.year, now.month, now.day, now.hour, now.minute, now.second)
         k=input("하고싶은 말 입력하세요 : ")
@@ -74,8 +81,6 @@ def insertPost(db,user):
 def deletePost(db,user):
     while True:
         t = db.users.find_one({"username": user})
-        for i in t['posts']:
-            print(i)
         date=input("\n삭제하고 싶은 포스트의 시간을 입력하세요 (ex:2017/01/10 11:23:11) : ")
         db.users.update({"username": user},{"$pull":{"posts":{"date":date}}})
         break

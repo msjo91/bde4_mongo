@@ -37,6 +37,7 @@ def signup(db):
         if password == password_confirm:
             if db.users.find_one({"username": username}):
                 print("    User already exists!")
+                break
             else:
                 first_name = input("Enter first name: ")
                 last_name = input("Enter last name: ")

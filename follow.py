@@ -27,52 +27,65 @@ def newsfeed(db,user):
 
         elif enter == "2":
             k = int(input("몇번째 뉴스피에 좋아요를 누르시겠습니까?"))
-            if db.users.find_one({"username":"%s"%newsfeed2[k-1][0], "posts":{"$elemMatch":{"date":newsfeed2[k-1][1]["date"],
-                                                                                        "like_list":{"$in":[user]}}}}):
-                print("\n이미 좋아요를 눌렀습니다")
-            else:
-                db.users.update({"username":"%s"%newsfeed2[k-1][0],"posts.date":newsfeed2[k-1][1]["date"]}
-                            ,{'$inc':{'posts.$.like':1}})
-                db.users.update({"username": "%s" % newsfeed2[k - 1][0], "posts.date": newsfeed2[k - 1][1]["date"]}
-                            , {'$addToSet': {'posts.$.like_list':user}})
+            try:
+                if db.users.find_one({"username":"%s"%newsfeed2[k-1][0], "posts":{"$elemMatch":{"date":newsfeed2[k-1][1]["date"],
+                                                                                            "like_list":{"$in":[user]}}}}):
+                    print("\n이미 좋아요를 눌렀습니다")
+                else:
+                    db.users.update({"username":"%s"%newsfeed2[k-1][0],"posts.date":newsfeed2[k-1][1]["date"]}
+                                ,{'$inc':{'posts.$.like':1}})
+                    db.users.update({"username": "%s" % newsfeed2[k - 1][0], "posts.date": newsfeed2[k - 1][1]["date"]}
+                                , {'$addToSet': {'posts.$.like_list':user}})
+            except IndexError:
+                print("포스팅이 없습니다")
 
         elif enter == "3":
             k = int(input("몇번째 뉴스피에 싫어요를 누르시겠습니까?"))
-            if db.users.find_one({"username": "%s" % newsfeed2[k - 1][0],
-                              "posts": {"$elemMatch": {"date": newsfeed2[k - 1][1]["date"],
-                                                       "hate_list": {"$in": [user]}}}}):
-                print("\n이미 싫어요를 눌렀습니다")
-            else:
-                db.users.update({"username":"%s"%newsfeed2[k-1][0],"posts.date":newsfeed2[k-1][1]["date"]}
-                                ,{'$inc':{'posts.$.hate':1}})
-                db.users.update({"username": "%s" % newsfeed2[k - 1][0], "posts.date": newsfeed2[k - 1][1]["date"]}
-                                , {'$addToSet': {'posts.$.hate_list': user}})
+            try:
+                if db.users.find_one({"username": "%s" % newsfeed2[k - 1][0],
+                                  "posts": {"$elemMatch": {"date": newsfeed2[k - 1][1]["date"],
+                                                           "hate_list": {"$in": [user]}}}}):
+                    print("\n이미 싫어요를 눌렀습니다")
+                else:
+                    db.users.update({"username":"%s"%newsfeed2[k-1][0],"posts.date":newsfeed2[k-1][1]["date"]}
+                                    ,{'$inc':{'posts.$.hate':1}})
+                    db.users.update({"username": "%s" % newsfeed2[k - 1][0], "posts.date": newsfeed2[k - 1][1]["date"]}
+                                    , {'$addToSet': {'posts.$.hate_list': user}})
+            except IndexError:
+                print("포스팅이 없습니다")
+
 
 
         elif enter == "4":
             k = int(input("몇번째 뉴스피에 좋아요를 취소하시겠습니까?"))
-            if db.users.find_one({"username": "%s" % newsfeed2[k - 1][0],
-                              "posts": {"$elemMatch": {"date": newsfeed2[k - 1][1]["date"],
-                                                       "like_list": {"$in": [user]}}}}):
-                db.users.update({"username":"%s"%newsfeed2[k-1][0],"posts.date":newsfeed2[k-1][1]["date"]}
-                                ,{'$inc':{'posts.$.like':-1}})
-                db.users.update({"username": "%s" % newsfeed2[k - 1][0], "posts.date": newsfeed2[k - 1][1]["date"]}
-                                , {'$pull': {'posts.$.like_list': user}})
-            else:
-                print('좋아요를 누르지 않았습니다')
+            try:
+                if db.users.find_one({"username": "%s" % newsfeed2[k - 1][0],
+                                  "posts": {"$elemMatch": {"date": newsfeed2[k - 1][1]["date"],
+                                                           "like_list": {"$in": [user]}}}}):
+                    db.users.update({"username":"%s"%newsfeed2[k-1][0],"posts.date":newsfeed2[k-1][1]["date"]}
+                                    ,{'$inc':{'posts.$.like':-1}})
+                    db.users.update({"username": "%s" % newsfeed2[k - 1][0], "posts.date": newsfeed2[k - 1][1]["date"]}
+                                    , {'$pull': {'posts.$.like_list': user}})
+                else:
+                    print('좋아요를 누르지 않았습니다')
+            except IndexError:
+                print("포스팅이 없습니다")
 
 
         elif enter == "5":
             k = int(input("몇번째 뉴스피에 싫어요를 취소하시겠습니까?"))
-            if db.users.find_one({"username": "%s" % newsfeed2[k - 1][0],
-                              "posts": {"$elemMatch": {"date": newsfeed2[k - 1][1]["date"],
-                                                       "hate_list": {"$in": [user]}}}}):
-                db.users.update({"username":"%s"%newsfeed2[k-1][0],"posts.date":newsfeed2[k-1][1]["date"]}
-                                ,{'$inc':{'posts.$.hate':-1}})
-                db.users.update({"username": "%s" % newsfeed2[k - 1][0], "posts.date": newsfeed2[k - 1][1]["date"]}
-                                , {'$pull': {'posts.$.hate_list': user}})
-            else:
-                print('싫어요를 누르지 않았습니다')
+            try:
+                if db.users.find_one({"username": "%s" % newsfeed2[k - 1][0],
+                                  "posts": {"$elemMatch": {"date": newsfeed2[k - 1][1]["date"],
+                                                           "hate_list": {"$in": [user]}}}}):
+                    db.users.update({"username":"%s"%newsfeed2[k-1][0],"posts.date":newsfeed2[k-1][1]["date"]}
+                                    ,{'$inc':{'posts.$.hate':-1}})
+                    db.users.update({"username": "%s" % newsfeed2[k - 1][0], "posts.date": newsfeed2[k - 1][1]["date"]}
+                                    , {'$pull': {'posts.$.hate_list': user}})
+                else:
+                    print('싫어요를 누르지 않았습니다')
+            except IndexError:
+                print("포스팅이 없습니다")
 
         else:
             break
