@@ -8,58 +8,64 @@ online = []
 
 
 def signin():
-    print("\n::::SIGN IN::::\n")
-    username = input("Enter username: ")
-    password = input("Enter password: ")
-    if users.find_one({"username": username, "password": password}):
-        online.append(username)
-        print("Welcome, %s" % username)
-    else:
-        print("    User does not exist or wrong password input!")
-        signin()
+    while 1:
+        print("\n::::SIGN IN::::\n")
+        username = input("Enter username or type exit to exit: ")
+        if username == 'exit':
+            break
+        password = input("Enter password: ")
+        if users.find_one({"username": username, "password": password}):
+            online.append(username)
+            print("Welcome, %s" % username)
+        else:
+            print("    User does not exist or wrong password input!")
+            signin()
 
 
 def signup():
-    print("\n::::SIGN UP::::\n")
-    username = input("Enter username: ")
-    password = input("Enter password: ")
-    if not password:
-        print("    You must insert a password!")
-        signup()
-    password_confirm = input("Confirm password: ")
-    if password == password_confirm:
-        if users.find_one({"username": username}):
-            print("    User already exists!")
+    while 1:
+        print("\n::::SIGN UP::::\n")
+        username = input("Enter username or type exit to exit: ")
+        if username == 'exit':
+            break
+        password = input("Enter password: ")
+        if not password:
+            print("    You must insert a password!")
             signup()
-        else:
-            first_name = input("Enter first name: ")
-            last_name = input("Enter last name: ")
-            full_name = first_name + ' ' + last_name
-            bday, bmonth, byear = map(int, input("Enter birthday in DD-MM-YYYY format: ").split('-'))
-            try:
-                birth = datetime(byear, bmonth, bday)
-            except ValueError as e:
-                print('    ' + str(e))
+        password_confirm = input("Confirm password: ")
+        if password == password_confirm:
+            if users.find_one({"username": username}):
+                print("    User already exists!")
                 signup()
-            email = input("Enter email: ")
-            phone = input("Enter phone number: ")
-            address = input("Enter address: ")
-            users.insert({
-                "username": username,
-                "password": password,
-                "name": full_name,
-                "first name": first_name,
-                "last name": last_name,
-                "birth": birth,
-                "email": email,
-                "phone": phone,
-                "address": address
-            })
-            print("User creation success!")
-            signin()
-    else:
-        print("Passwords don't match!")
-        signup()
+            else:
+                first_name = input("Enter first name (optional): ")
+                last_name = input("Enter last name (optional): ")
+                full_name = first_name + ' ' + last_name
+                bday, bmonth, byear = map(int, input("Enter birthday in DD-MM-YYYY format (optional): ").split('-'))
+                try:
+                    birth = datetime(byear, bmonth, bday)
+                except ValueError as e:
+                    print('    ' + str(e))
+                    signup()
+                email = input("Enter email (optional): ")
+                phone = input("Enter phone number (optional): ")
+                address = input("Enter address (optional): ")
+                users.insert({
+                    "username": username,
+                    "password": password,
+                    "name": full_name,
+                    "first name": first_name,
+                    "last name": last_name,
+                    "birth": birth,
+                    "email": email,
+                    "phone": phone,
+                    "address": address
+                })
+                print("User creation success!")
+                signin()
+        else:
+            print("Passwords don't match!")
+            signup()
 
 
 def signout():
@@ -67,28 +73,29 @@ def signout():
 
 
 def profile():
-    print("\n::::MY STATUS::::\n")
-    username = online[0]
-    if users.find_one({"username": username}):
-        cursor = users.find_one({"username": username})
-        print("""
-        Username: {username}
-        Name: {name}
-        Birthday: {birth}
-        Email: {email}
-        Phone: {phone}
-        Address: {address}
-        """.format(
-            username=username,
-            name=cursor['name'],
-            birth=str(cursor['birth']).split()[0],
-            email=cursor['email'],
-            phone=cursor['phone'],
-            address=cursor['address']
-        ))
-    else:
-        print("    Wrong password input!")
-        profile()
+    while 1:
+        print("\n::::MY STATUS::::\n")
+        username = online[0]
+        if users.find_one({"username": username}):
+            cursor = users.find_one({"username": username})
+            print("""
+            Username: {username}
+            Name: {name}
+            Birthday: {birth}
+            Email: {email}
+            Phone: {phone}
+            Address: {address}
+            """.format(
+                username=username,
+                name=cursor['name'],
+                birth=str(cursor['birth']).split()[0],
+                email=cursor['email'],
+                phone=cursor['phone'],
+                address=cursor['address']
+            ))
+        else:
+            print("    Wrong password input!")
+            profile()
 
 
 def update_profile(act):
