@@ -12,8 +12,8 @@ def postInterface(db,user):
     """
     while True:
         t = db.users.find_one({"username": user})
-        posts_list = sorted(t['posts'], key=lambda x: datetime.strptime(x["date"], '%Y/%m/%d %H:%M:%S'), reverse=True)
         try:
+            posts_list = sorted(t['posts'], key=lambda x: datetime.strptime(x["date"], '%Y/%m/%d %H:%M:%S'), reverse=True)
             print("My Posts List : \n\n",posts_list)
         except KeyError :
             print("\nPosts not exists")
@@ -37,9 +37,9 @@ def postInterface(db,user):
 def mypostslist(db,user):
     while True:
         t = db.users.find_one({"username": user})
-        posts_list = sorted(t['posts'], key=lambda x: datetime.strptime(x["date"], '%Y/%m/%d %H:%M:%S'),
-                            reverse=True)
         try:
+            posts_list = sorted(t['posts'], key=lambda x: datetime.strptime(x["date"], '%Y/%m/%d %H:%M:%S'),
+                            reverse=True)
             for i in posts_list:
                 print(i)
         except KeyError:

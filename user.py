@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import *
 
 from pymongo import MongoClient
 
@@ -44,7 +44,7 @@ def signup(db):
                 full_name = first_name + ' ' + last_name
                 bday, bmonth, byear = map(int, input("Enter birthday in DD-MM-YYYY format: ").split('-'))
                 try:
-                    birth = datetime.datetime(byear, bmonth, bday)
+                    birth = datetime(byear, bmonth, bday)
                 except ValueError as e:
                     print('    ' + str(e))
                 email = input("Enter email: ")
