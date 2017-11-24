@@ -10,8 +10,7 @@ from post import *
 online = []
 
 def signin(db):
-
-    while(1):
+    while True:
         print("\n::::SIGN IN::::\n")
         username = input("Enter username: ")
         password = input("Enter password: ")
@@ -27,48 +26,60 @@ def signin(db):
                 break
 
 def signup(db):
-    while(1):
+    while True:
         print("\n::::SIGN UP::::\n")
         username = input("Enter username: ")
-        password = input("Enter password: ")
-        if not password:
-            print("    You must insert a password!")
-        password_confirm = input("Confirm password: ")
-        if password == password_confirm:
-            if db.users.find_one({"username": username}):
-                print("    User already exists!")
-                break
-            else:
-                first_name = input("Enter first name: ")
-                last_name = input("Enter last name: ")
-                full_name = first_name + ' ' + last_name
-                bday, bmonth, byear = map(int, input("Enter birthday in DD-MM-YYYY format: ").split('-'))
-                try:
-                    birth = datetime(byear, bmonth, bday)
-                except ValueError as e:
-                    print('    ' + str(e))
-                email = input("Enter email: ")
-                phone = input("Enter phone number: ")
-                address = input("Enter address: ")
-                db.users.insert({
-                    "username": username,
-                    "password": password,
-                    "name": full_name,
-                    "first name": first_name,
-                    "last name": last_name,
-                    "birth": birth,
-                    "email": email,
-                    "phone": phone,
-                    "address": address,
-                    "following":0,
-                    "follower":0,
-                    "following list":[],
-                    "follower list":[]
-                })
-                print("User creation success!")
-                break
+        search = db.users.find({}, {'username': 1, '_id': 0})
+        user_list = []
+
+        for i in search:
+            user_list.append(i['username'])
+
+        if username in user_list:
+            print("이미있는 유저 네임입니다.")
+            break
+
         else:
-            print("Passwords don't match!")
+            password = input("Enter password: ")
+            if not password:
+                print("    You must insert a password!")
+            password_confirm = input("Confirm password: ")
+            if password == password_confirm:
+                if db.users.find_one({"username": username}):
+                    print("    User already exists!")
+                    break
+                else:
+                    first_name = input("Enter first name: ")
+                    last_name = input("Enter last name: ")
+                    full_name = first_name + ' ' + last_name
+                    bday, bmonth, byear = map(int, input("Enter birthday in DD-MM-YYYY format: ").split('-'))
+                    try:
+                        birth = datetime(byear, bmonth, bday)
+                    except ValueError as e:
+                        print('    ' + str(e))
+                    email = input("Enter email: ")
+                    phone = input("Enter phone number: ")
+                    address = input("Enter address: ")
+                    db.users.insert({
+                        "username": username,
+                        "password": password,
+                        "name": full_name,
+                        "first name": first_name,
+                        "last name": last_name,
+                        "birth": birth,
+                        "email": email,
+                        "phone": phone,
+                        "address": address,
+                        "following":0,
+                        "follower":0,
+                        "following list":[],
+                        "follower list":[]
+                    })
+                    print("User creation success!")
+                    break
+            else:
+                print("Passwords don't match!")
+                break
 
 
 def signout(db):

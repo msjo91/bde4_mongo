@@ -14,7 +14,9 @@ def postInterface(db,user):
         t = db.users.find_one({"username": user})
         try:
             posts_list = sorted(t['posts'], key=lambda x: datetime.strptime(x["date"], '%Y/%m/%d %H:%M:%S'), reverse=True)
-            print("My Posts List : \n\n",posts_list)
+            print("My Posts List : \n\n")
+            for i in posts_list:
+                print(i)
         except KeyError :
             print("\nPosts not exists")
         print("\n===============================================================")
@@ -74,7 +76,11 @@ def insertPost(db,user):
         now=datetime.now()
         index = "%d/%d/%d %d:%d:%d" % (now.year, now.month, now.day, now.hour, now.minute, now.second)
         k=input("하고싶은 말 입력하세요 : ")
-        db.users.update({"username": user}, {"$push":{"posts":{"post":k,"date":index}}})
+        hashing=[]
+        for i in k.split(" "):
+            if i[0]=="#":
+                hashing.append(i[1:])
+        db.users.update({"username": user}, {"$push":{"posts":{"post":k,"date":index,"hash":hashing}}})
         break
 
 

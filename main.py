@@ -3,6 +3,9 @@ from user import *
 from post import *
 from sys import *
 from follow import *
+from hashtag import *
+from message import *
+
 
 def index_sign(db):
     while True:
@@ -37,6 +40,8 @@ def index_main(db):
         print("    2. Newsfeed")
         print("    3. Post Interface")
         print("    4. follow page")
+        print("    5. Hashtag search")
+        print("    6. Message")
         print("    9. Log out")
         print("    0. Close")
         act = input("\nChoose an action: ")
@@ -51,6 +56,12 @@ def index_main(db):
             break
         if act == "4":
             followpage(db,user)
+            break
+        if act == "5":
+            hashtag_search(db,user)
+            break
+        if act == "6":
+            message(db,user)
             break
         elif act == "9":
             logout=True
