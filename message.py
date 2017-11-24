@@ -18,7 +18,7 @@ def message(db,user):
 
 def message_confirm(db,user):
     #메세지는 전유저에게 다보낼수 있음, 유저목록에있으면 그유저와 나눴던 메세지들확인가능
-    #자기자신과는 메세지확인불가 기본3개까지볼수있고 더보기가능 +2개씩추가
+    #자기자신과는 메세지확인불가 기본3개까지볼수있고 더보기가능 +2개씩 추가
     while True:
         search = db.users.find({}, {'username': 1, '_id': 0})
         user_list = []
