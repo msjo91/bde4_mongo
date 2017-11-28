@@ -31,6 +31,7 @@ def message_confirm(db,user):
 
         if friend==user:
             print("자기자신과의 메세지는 없습니다.")
+            break
         else:
             if friend in user_list:
                     search=db.users.find_one({"username":user,"message.Reciever":friend})

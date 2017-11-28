@@ -94,6 +94,7 @@ def newsfeed(db,user):
                 break
         else:
             print("팔로워들의 포스팅이 없습니다")
+            break
 
 def followpage(db,user):
     while True:
