@@ -13,16 +13,26 @@ def signin(db):
     while True:
         print("\n::::SIGN IN::::\n")
         username = input("Enter username: ")
-        password = input("Enter password: ")
-        if db.users.find_one({"username": username, "password": password}):
-            online.append(username)
-            print("Welcome, %s" % username)
-            break
+        if db.users.find_one({"username": username}):
+            password = input("Enter password: ")
+            if db.users.find_one({"username": username, "password": password}):
+                online.append(username)
+                print("Welcome, %s" % username)
+                break
+            else:
+                print("Wrong password input!")
+                k = input("다시 시도할려면 1, 아니면 아무키나 누르세요 : ")
+                if k == "1":  # EXIT
+                    pass
+                else:
+                    break
 
         else:
-            print("    User does not exist or wrong password input!")
-            k=input("1 is re mainpage :")
+            print("User does not exist!")
+            k=input("다시 시도할려면 1, 아니면 아무키나 누르세요 : ")
             if k=="1": # EXIT
+                pass
+            else:
                 break
 
 def signup(db):
