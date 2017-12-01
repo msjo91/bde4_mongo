@@ -5,7 +5,7 @@ bde4_mongo_env
 *.bson
 __dev*/
 *.sqlite
-media/*
+media/
 
 # Created by https://www.gitignore.io/api/git,venv,data,text,linux,macos,python,windows,pycharm,database,virtualenv,sublimetext,jupyternotebook
 
