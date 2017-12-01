@@ -7,6 +7,7 @@
 3. Post모델의 like_users필드 구현
 4. Comment모델 구현
 """
+
 from django.conf import settings
 from django.db import models
 
