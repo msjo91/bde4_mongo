@@ -6,7 +6,7 @@ from django.contrib.auth.password_validation import validate_password
 User = get_user_model()
 
 
-class LoginForm(forms.Form):
+class SigninForm(forms.Form):
     email = forms.EmailField(max_length=100)
     password = forms.CharField(max_length=30, widget=forms.PasswordInput)
 
@@ -18,15 +18,15 @@ class SignupForm(forms.Form):
     nickname = forms.CharField(max_length=20)
     gender = forms.ChoiceField(
         choices=User.CHOICES_GENDER,
-        widget=forms.RadioSelect(),
+        widget=forms.Select(),
     )
 
-    def clean_username(self):
-        """username field 검증 로직"""
-        username = self.cleaned_data['username']
-        if User.objects.filter(username=username).exists():
-            raise forms.ValidationError('username already exists!')
-        return username
+    def clean_email(self):
+        """email field 검증 로직"""
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('Email already exists!')
+        return email
 
     def clean_password2(self):
         password1 = self.cleaned_data['password1']
