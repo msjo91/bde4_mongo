@@ -66,5 +66,5 @@ class ChangeProfileImageModelForm(forms.ModelForm):
     class Meta:
         model = User
         fields = (
-            'img_profile',
+            'profile_photo',
         )

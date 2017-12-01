@@ -45,7 +45,7 @@ def signin_fbv(request):
     context = {
         'form': form,
     }
-    # member/login.html 템플릿을 render한 결과를 리턴
+    # member/signin.html 템플릿을 render한 결과를 리턴
     return render(request, 'member/signin.html', context)
 
 
