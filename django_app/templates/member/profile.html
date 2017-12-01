@@ -8,12 +8,10 @@
 			</a>
 			<div class="profile-text">
 				<div class="text-top">
+					<img src="{{ MEDIA_URL }}{{ user.profile_photo }}" height="100" width="100">
 					<span class="profile-nickname">{{ user.nickname }}</span>
-					<a class="btn">프로필 편집</a>
-					<a
-						class="btn"
-						href="{% url 'member:logout' %}">
-						Logout</a>
+					<a class="btn" href="{% url 'member:change_profile_image' %}">프로필 편집</a>
+					<a class="btn" href="{% url 'member:signout' %}">Sign Out</a>
 				</div>
 				<div class="text-status">
 					<span class="status-item">게시물 {{ post_count }}개</span>

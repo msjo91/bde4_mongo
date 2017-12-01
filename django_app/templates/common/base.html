@@ -6,7 +6,7 @@
 	<meta name="viewport"
 	      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Instagram</title>
+	<title>Mongo SNS</title>
   <link rel="stylesheet" href="{% static 'css/sprites.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/base.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/common.min.css' %}">
@@ -16,22 +16,37 @@
 <body>
   <div id="wrap">
     <div>
-	    {{ user.nickname }}
+			{% if user.is_authenticated %}
+				<img src="{{ MEDIA_URL }}{{ user.profile_photo }}" height="30" width="30">
+				Welcome, [{{ user.nickname }}]!
+				<a class="btn" href="{% url 'member:signout' %}">Sign Out</a>
+			{% else %}
+				<a href="{% url 'member:signup' %}">
+					<button type="submit" class="btn">SIGN UP</button>
+				</a>
+				<a href="{% url 'member:signin' %}">
+					<button type="submit" class="btn">SIGN IN</button>
+				</a>
+			{% endif %}
     </div>
   	<header class="main-header">
   		<nav class="header-nav">
         <span class="nav-group nav-left">
-          <a href="{% url 'post:list' %}" class="logo sprite-logo"></a>
-        </span>
-
-        <span class="nav-group nav-center">
-          <input type="text">
+					{% if user.is_authenticated %}
+	          <a href="{% url 'post:list' %}" class="logo sprite-logo"></a>
+					{% else %}
+						<a href="{% url 'member:signup' %}" class="logo sprite-logo"></a>
+					{% endif %}
         </span>
 
         <span class="nav-group nav-right">
           <a href="" class="btn-header-nav sprite-explore"></a>
           <a href="" class="btn-header-nav sprite-activity"></a>
-          <a href="{% url 'member:profile' %}" class="btn-header-nav sprite-profile"></a>
+					{% if user.is_authenticated %}
+	          <a href="{% url 'member:profile' %}" class="btn-header-nav sprite-profile"></a>
+					{% else %}
+						<a href="{% url 'member:signin' %}" class="btn-header-nav sprite-profile"></a>
+					{% endif %}
         </span>
   		</nav>
   	</header>
