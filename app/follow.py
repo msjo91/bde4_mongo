@@ -1,7 +1,6 @@
 import sys
 
 from pymongo import MongoClient
-from pymongo.errors import ConnectionFailure
 
 from member import online
 
