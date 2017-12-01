@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pymongo import MongoClient
 
-users = MongoClient('localhost', 27017).bde4_sns.member
+users = MongoClient('localhost', 27017).sns.user
 
 online = []
 
